@@ -1,4 +1,4 @@
 # desc "Explaining what the task does"
-# task :acting_validator do
+# task :act_a do
 #   # Task goes here
 # end

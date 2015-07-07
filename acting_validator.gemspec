@@ -1,12 +1,12 @@
 $:.push File.expand_path("../lib", __FILE__)
 
 # Maintain your gem's version:
-require "acting_validator/version"
+require "act_a/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |spec|
-  spec.name        = "acting_validator"
-  spec.version     = ActingValidator::VERSION
+  spec.name        = "act_a"
+  spec.version     = ActA::VERSION
   spec.authors     = ["mmmpa"]
   spec.email       = ["mmmpa.mmmpa@gmail.com"]
   spec.homepage    = "http://mmmpa.net"

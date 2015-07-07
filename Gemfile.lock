@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    acting_validator (0.0.1)
+    act_a (0.0.1)
       rails (~> 4.0.0)
 
 GEM
@@ -133,7 +133,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  acting_validator!
+  act_a!
   bundler (~> 1.10)
   coveralls
   factory_girl_rails

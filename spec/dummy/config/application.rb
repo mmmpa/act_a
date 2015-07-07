@@ -8,7 +8,7 @@ require "sprockets/railtie"
 # require "rails/test_unit/railtie"
 
 Bundler.require(*Rails.groups)
-require "acting_validator"
+require "act_a"
 
 module Dummy
   class Application < Rails::Application
