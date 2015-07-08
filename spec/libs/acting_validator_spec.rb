@@ -3,6 +3,10 @@ require 'rails_helper'
 RSpec.describe ActA do
   let(:actor) { ActA.(Model) }
 
+  it { expect(actor).to be_a(ActA::Actor) }
+  it { expect(actor.apply(str: '')).to be_a(ActA::Validator) }
+
+
   describe 'validating with instance.valid?' do
     context 'when validated' do
       context 'with "validates"' do
@@ -15,6 +19,10 @@ RSpec.describe ActA do
       context 'with other validate' do
         it { expect(actor.apply(str: '失敗する').valid_brutally?).to be_falsey }
       end
+
+      context 'with db limitation' do
+        it { expect(actor.apply(not_null: '').valid_brutally?).to be_truthy }
+      end
     end
 
     context 'when have error message' do
@@ -23,7 +31,8 @@ RSpec.describe ActA do
     end
 
     context 'when use !' do
-      it { expect{actor.apply(str: '文字列', txt: '').validate_brutally!}.to raise_exception(ActiveRecord::RecordInvalid) }
+      it { expect { actor.apply(str: '文字列', txt: '').validate_brutally! }.to raise_exception(ActiveRecord::RecordInvalid) }
+      it { expect(actor.apply(str: '文字列', txt: 'aaa').validate_brutally!).to be_a(ActA::Validator) }
     end
 
     context 'with self made validator' do
@@ -49,19 +58,24 @@ RSpec.describe ActA do
         it { expect(actor.apply(bol: '文字列').valid?).to be_falsey }
       end
 
-      context 'when have error message' do
-        it { expect(actor.apply(int: '文字列').validate.messages[:int]).to include('number only') }
-        it { expect(actor.apply(int: '文字列').validate.errors.messages[:int]).to include('number only') }
+      context 'with db limitation' do
+        it { expect(actor.apply(not_null: '').valid_brutally?).to be_truthy }
       end
+    end
 
-      context 'when use !' do
-        it { expect{actor.apply(str: '文字列', txt: '').validate!}.to raise_exception(ActiveRecord::RecordInvalid) }
-      end
+    context 'when have error message' do
+      it { expect(actor.apply(int: '文字列').validate.messages[:int]).to include('number only') }
+      it { expect(actor.apply(int: '文字列').validate.errors.messages[:int]).to include('number only') }
+    end
 
-      context 'with self made validator' do
-        it { expect(actor.apply(bol: '文字列').valid?).to be_falsey }
-        it { expect(actor.apply(bol: true).valid?).to be_truthy }
-      end
+    context 'when use !' do
+      it { expect { actor.apply(str: '文字列', txt: '').validate! }.to raise_exception(ActiveRecord::RecordInvalid) }
+      it { expect(actor.apply(str: '文字列', txt: 'aaa').validate!).to be_a(ActA::Validator) }
+    end
+
+    context 'with self made validator' do
+      it { expect(actor.apply(bol: '文字列').valid?).to be_falsey }
+      it { expect(actor.apply(bol: true).valid?).to be_truthy }
     end
   end
 end

@@ -5,12 +5,25 @@ module ActA
     end
 
     def new(klass)
-      Base.new(klass)
+      Actor.new(klass)
     end
   end
 
+  class Actor
+    attr_accessor :klass
 
-  class Base
+    def initialize(klass)
+      self.klass = klass
+    end
+
+    def apply(*args)
+      Validator.new(klass).apply(*args)
+    end
+  end
+
+  class Validator
+    attr_accessor :record, :keys, :klass
+
     def initialize(klass)
       self.klass = klass
     end
@@ -42,7 +55,7 @@ module ActA
     def validate
       keys.each do |attribute_name|
         validators(attribute_name).each do |validator|
-          validator.validate(record)
+          duplicate_validator(validator, attribute_name).validate(record)
         end
       end
     rescue
@@ -78,8 +91,6 @@ module ActA
     end
 
     private
-    attr_accessor :record, :keys, :klass
-
     def validators(attribute_name)
       klass._validators[attribute_name.to_sym]
     end
